@@ -29,13 +29,14 @@ public class MainApp {
         String[] popularWords = bf.getPopularWords();
 
         validInput(answStr);
+        int shift;
 
         if (!answStr[0].isEmpty() && vd.isFileExists(fileCommonEng)) {
             switch (Integer.parseInt(answStr[0])) {
                 case 1:
                     String workingText = fm.readFile(englishText);
 
-                    int shift = Integer.parseInt(answStr[1]);
+                    shift = Integer.parseInt(answStr[1]);
                     String resWorkingText = cipher.encrypt(workingText, shift);
                     System.out.println(resWorkingText);
                     fm.writeFile(resWorkingText, fileToEnd);

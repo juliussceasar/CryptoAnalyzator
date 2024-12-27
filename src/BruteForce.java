@@ -8,14 +8,12 @@ public class BruteForce {
         FileManager fm = new FileManager();
         String str = fm.readFile(fileCommonEng);
 
-        String[] popularWords = str.split("\n");
-
-        return popularWords;
+        return str.split("\n");
     }
 
     public String decryptByBruteForce(String encryptedText, String[] popularWords) {
         int n = 0;
-        int realShift = 0;
+        int realShift;
         Cipher cipher = new Cipher();
 
         for (int i = 0; i < encryptedText.length(); i++) {

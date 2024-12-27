@@ -1,11 +1,9 @@
 import java.io.*;
-import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
 
 public class FileManager {
     public String readFile(String filePath) throws IOException {
@@ -38,12 +36,8 @@ public class FileManager {
         try(BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file))) {
             byte[] buffer = new byte[1024];
 
-
             buffer = content.getBytes(StandardCharsets.UTF_8);
-            int bytesRead;
             bos.write(buffer, 0, buffer.length);
-
-
         }
     }
 }

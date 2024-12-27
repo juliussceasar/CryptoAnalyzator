@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 public class Cipher {
     private char[] alphabet = ("abcdefghijklmnopqrstuvwxyz" +
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
@@ -15,7 +13,6 @@ public class Cipher {
 
     public String encrypt(String text, int shift) {
         char[] textCh = text.toCharArray();
-        int length = text.length();
 
         for (int i = 0; i < text.length();i++) {
             int variable = textCh[i];
