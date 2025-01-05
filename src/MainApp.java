@@ -37,19 +37,28 @@ public class MainApp {
                     String workingText = fm.readFile(englishText);
 
                     shift = Integer.parseInt(answStr[1]);
-                    String resWorkingText = cipher.encrypt(workingText, shift);
-                    System.out.println(resWorkingText);
-                    fm.writeFile(resWorkingText, fileToEnd);
+                    if (vd.isValidKey(shift, cipher.getAlphabet())) {
+                        String resWorkingText = cipher.encrypt(workingText, shift);
+                        System.out.println(resWorkingText);
+                        fm.writeFile(resWorkingText, fileToEnd);
+                    } else {
+                        System.out.println("Key is invalid.");
+                    }
 
                     mainMenu();
                     break;
+
                 case 2:
                     String workingText2 = fm.readFile(fileToEnd);
 
                     shift = Integer.parseInt(answStr[1]);
-                    String resWorkingText2 = cipher.decrypt(workingText2, shift);
-                    System.out.println(resWorkingText2);
-                    fm.writeFile(resWorkingText2, fileToEnd);
+                    if (vd.isValidKey(shift, cipher.getAlphabet())) {
+                        String resWorkingText2 = cipher.decrypt(workingText2, shift);
+                        System.out.println(resWorkingText2);
+                        fm.writeFile(resWorkingText2, fileToEnd);
+                    } else {
+                        System.out.println("Key is invalid.");
+                    }
 
                     mainMenu();
                     break;
@@ -82,7 +91,7 @@ public class MainApp {
 
         while (answer.length != 2 && (Integer.parseInt(answer[0]) == 1 || Integer.parseInt(answer[0]) == 2)) {
             System.out.println("Please, enter the menu number + shift");
-            answer = scanner.nextLine().split(" ");
+            mainMenu();
         }
 
 

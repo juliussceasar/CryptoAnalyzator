@@ -11,6 +11,10 @@ public class Cipher {
     public Cipher() {
     }
 
+    public char[] getAlphabet() {
+        return alphabet;
+    }
+
     public String encrypt(String text, int shift) {
         char[] textCh = text.toCharArray();
 
