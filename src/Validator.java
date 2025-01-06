@@ -9,6 +9,10 @@ public class Validator {
     }
     public boolean isFileExists(String filePath) {
         File file = Path.of(filePath).toFile();
-        return file.exists();
+        boolean isExists = file.exists();
+        if (!isExists) {
+            throw new RuntimeException(filePath + " does not exist!");
+        }
+        return isExists;
     }
 }

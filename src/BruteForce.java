@@ -1,12 +1,10 @@
 import java.io.IOException;
 
 public class BruteForce {
-    static final String fileCommonEng = "C:\\Users\\Нур89\\IdeaProjects\\cryptoanalyzer\\src\\file100.txt";
 
-
-    public String[] getPopularWords() throws IOException {
+    public String[] getPopularWords(String path) throws IOException {
         FileManager fm = new FileManager();
-        String str = fm.readFile(fileCommonEng);
+        String str = fm.readFile(path);
 
         return str.split("\n");
     }
@@ -31,7 +29,6 @@ public class BruteForce {
                         }
                         if (n > 20) {
                             realShift = i;
-                            System.out.println(realShift + " " + i);
                             return "shift is " + realShift;
                         }
                     }

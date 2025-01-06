@@ -41,7 +41,7 @@ public class Cipher {
         return String.valueOf(textCh);
     }
     public String decrypt(String encryptedText, int shift) {
-        encryptedText = encrypt(encryptedText, shift);
+        encryptedText = encrypt(encryptedText, -shift);
         return encryptedText;
     }
 }
