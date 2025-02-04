@@ -20,11 +20,11 @@ public abstract class AbstractWorkflow {
     protected void readFile(String filePath) throws IOException {
         content = FileManager.readFile(filePath);
         setContentCiphered(content);
-    };
+    }
 
     abstract void execute(String contentRaw, int shift);
 
     protected void writeFile(String content, String fileEndPath) throws IOException {
         FileManager.writeFile(content, fileEndPath);
-    };
+    }
 }

@@ -1,5 +1,3 @@
-import java.io.IOException;
-
 public class EncryptWorkflow extends AbstractWorkflow {
     @Override
     void execute(String text, int shift) {
