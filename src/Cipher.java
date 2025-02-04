@@ -16,7 +16,7 @@ public class Cipher {
     public static String encrypt(String text, int shift) {
         char[] textCh = text.toCharArray();
 
-        for (int i = 0; i < text.length();i++) {
+        for (int i = 0; i < text.length(); i++) {
             int variable = textCh[i];
             if (textCh[i] == '\n' || textCh[i] == '\r') {
                 continue;
@@ -27,7 +27,7 @@ public class Cipher {
                     if (realShift >= alphabet.length) {
                         realShift = realShift % alphabet.length;
                     }
-                    if (realShift < 0) {
+                    while (realShift < 0) {
                         realShift = alphabet.length + realShift;
                     }
                     textCh[i] = alphabet[realShift];
@@ -38,6 +38,7 @@ public class Cipher {
         }
         return String.valueOf(textCh);
     }
+
     public static String decrypt(String encryptedText, int shift) {
         encryptedText = encrypt(encryptedText, -shift);
         return encryptedText;

@@ -14,7 +14,7 @@ public class MainApp {
     static AbstractWorkflow encryptWorkflow = new EncryptWorkflow();
     static AbstractWorkflow decryptWorkflow = new DecryptWorkflow();
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
         try {
             if (args.length != 0) {
                 choiceEntered(args);
@@ -59,9 +59,8 @@ public class MainApp {
     }
 
 
-
     public static void choiceEntered(String[] choice) throws IOException {
-        String files[] = new String[] {englishTextSample, commonEnglish100words, fileEncrypted};
+        String[] files = new String[]{englishTextSample, commonEnglish100words, fileEncrypted};
         boolean isValidatedFiles = false;
         for (String file : files) {
             isValidatedFiles = true;
@@ -90,7 +89,7 @@ public class MainApp {
 
                 encryptWorkflow.execute(englishTextSample, shift);
 
-                encryptWorkflow.writeFile(encryptWorkflow.getContentCiphered(), fileEncrypted);
+                encryptWorkflow.writeFile(fileEncrypted);
 
                 break;
             case 2:
@@ -98,12 +97,11 @@ public class MainApp {
 
                 decryptWorkflow.execute(fileEncrypted, shift);
 
-                decryptWorkflow.writeFile(encryptWorkflow.getContentCiphered(), fileEncrypted);
+                decryptWorkflow.writeFile(fileEncrypted);
 
                 break;
             case 3:
                 String workingText3 = FileManager.readFile(fileEncrypted);
-
                 System.out.println(bruteForce.decryptByBruteForce(workingText3, popularWords));
 
                 break;
@@ -123,8 +121,7 @@ public class MainApp {
         while (!String.join(" ", answStr).strip().matches("(^[034]$)|(^[1-2] \\d*$)")) {
             if (answStr.length == 0 || !answStr[0].matches("\\d")) {
                 System.out.println("Enter a number from 0 to 3");
-            }
-            else if ((Integer.parseInt(answStr[0]) == 1 || Integer.parseInt(answStr[0]) == 2) && answStr.length != 2) {
+            } else if ((Integer.parseInt(answStr[0]) == 1 || Integer.parseInt(answStr[0]) == 2) && answStr.length != 2) {
                 System.out.println("Please, enter the menu number + shift");
             } else {
                 System.out.println("Incorrect input!");
