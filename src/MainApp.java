@@ -4,15 +4,15 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 public class MainApp {
-    static String englishTextSample = "C:\\Users\\Нур89\\IdeaProjects\\cryptoanalyzer\\src\\EnglishText.txt";
-    static String commonEnglish100words = "C:\\Users\\Нур89\\IdeaProjects\\cryptoanalyzer\\src\\file100.txt";
-    static String fileEncrypted = "C:\\Users\\Нур89\\IdeaProjects\\cryptoanalyzer\\src\\fileToEnd.txt";
+    static String englishTextSample = "src/EnglishText.txt";
+    static String commonEnglish100words = "src/file100.txt";
+    static String fileEncrypted = "src/fileToEnd.txt";
 
     static Scanner scanner = new Scanner(System.in);
-    static FileManager fm = new FileManager();
-    static Cipher cipher = new Cipher();
-    static Validator vd = new Validator();
-    static BruteForce bf = new BruteForce();
+    static Validator validator = new Validator();
+    static BruteForce bruteForce = new BruteForce();
+    static AbstractWorkflow encryptWorkflow = new EncryptWorkflow();
+    static AbstractWorkflow decryptWorkflow = new DecryptWorkflow();
 
     public static void main(String[] args)  {
         try {
@@ -29,14 +29,16 @@ public class MainApp {
     }
 
     public static void showMenu() {
-        System.out.println("What do you want to do?");
-        System.out.println("1. Encrypt a file. \n> 1 + shift");
-        System.out.println("2. Decrypt a file. " +
-                "\n(Key is the same for encryption/decryption.) " +
-                "\n> 2 + shift");
-        System.out.println("3. Bruteforce.");
-        System.out.println("4. Change files");
-        System.out.println("0. Exit.");
+        System.out.println("""
+                What do you want to do?
+                1. Encrypt a file.
+                > 1 + shift
+                2. Decrypt a file.
+                (Key is the same for encryption/decryption.)
+                > 2 + shift
+                3. Bruteforce.
+                4. Change files.
+                0. Exit.""");
     }
 
     public static void changeFiles() throws IOException {
@@ -48,9 +50,9 @@ public class MainApp {
         fileEncrypted = scanner.nextLine();
         String[] files = new String[]{englishTextSample, commonEnglish100words, fileEncrypted};
         for (String file : files) {
-            //Files.createFile(Path.of(file));
-            if (!Files.isRegularFile(Path.of(file))) {
-                Files.createFile(Path.of(file));
+            Path pathOfFile = Path.of(file);
+            if (!Files.isRegularFile(pathOfFile)) {
+                Files.createFile(pathOfFile);
             }
         }
         System.out.println("New files were updated.");
@@ -58,58 +60,61 @@ public class MainApp {
 
 
 
-    public static void choiceEntered(String[] answStr) throws IOException {
-
-        String[] popularWords = bf.getPopularWords(commonEnglish100words);
-
-        int shift;
-
-        if (vd.isFileExists(englishTextSample) &&
-                vd.isFileExists(commonEnglish100words) &&
-                vd.isFileExists(fileEncrypted)) {
-            switch (Integer.parseInt(answStr[0])) {
-                case 1:
-                    String workingText = fm.readFile(englishTextSample);
-
-                    shift = Integer.parseInt(answStr[1]);
-                    if (vd.isValidKey(shift, cipher.getAlphabet())) {
-                        String resWorkingText = cipher.encrypt(workingText, shift);
-                        System.out.println(resWorkingText);
-                        fm.writeFile(resWorkingText, fileEncrypted);
-                    } else {
-                        System.out.println("Key is invalid.");
-                    }
-                    break;
-
-                case 2:
-                    String workingText2 = fm.readFile(fileEncrypted);
-
-                    shift = Integer.parseInt(answStr[1]);
-                    if (vd.isValidKey(shift, cipher.getAlphabet())) {
-                        String resWorkingText2 = cipher.decrypt(workingText2, shift);
-                        System.out.println(resWorkingText2);
-                        fm.writeFile(resWorkingText2, fileEncrypted);
-                    } else {
-                        System.out.println("Key is invalid.");
-                    }
-                    break;
-                case 3:
-                    String workingText3 = fm.readFile(fileEncrypted);
-
-                    System.out.println(bf.decryptByBruteForce(workingText3, popularWords));
-
-                    break;
-                case 4:
-                    changeFiles();
-                    break;
-                case 0:
-                    System.exit(0);
-                    break;
-                default:
-                    break;
+    public static void choiceEntered(String[] choice) throws IOException {
+        String files[] = new String[] {englishTextSample, commonEnglish100words, fileEncrypted};
+        boolean isValidatedFiles = false;
+        for (String file : files) {
+            isValidatedFiles = true;
+            if (!Path.of(file).toFile().exists()) {
+                System.out.println(file + " does not seem to exist. Please, change files.");
+                isValidatedFiles = false;
+                break;
             }
-        } else {
-            System.out.println("File is invalid!");
+        }
+
+        String[] popularWords = BruteForce.getPopularWords(commonEnglish100words);
+        int action = Integer.parseInt(choice[0]);
+        int shift = (choice.length == 2) ? Integer.parseInt(choice[1]) : 0;
+
+        boolean isValidatedShift = validator.isValidKey(shift, Cipher.getAlphabet());
+
+        if (!isValidatedFiles) {
+            System.out.println("File is invalid.");
+        } else if (!isValidatedShift) {
+            System.out.println("Shift is not in the range of an alphabet. Change shift or alphabet.");
+        }
+
+        switch (action) {
+            case 1:
+                encryptWorkflow.readFile(englishTextSample);
+
+                encryptWorkflow.execute(englishTextSample, shift);
+
+                encryptWorkflow.writeFile(encryptWorkflow.getContentCiphered(), fileEncrypted);
+
+                break;
+            case 2:
+                decryptWorkflow.readFile(fileEncrypted);
+
+                decryptWorkflow.execute(fileEncrypted, shift);
+
+                decryptWorkflow.writeFile(encryptWorkflow.getContentCiphered(), fileEncrypted);
+
+                break;
+            case 3:
+                String workingText3 = FileManager.readFile(fileEncrypted);
+
+                System.out.println(bruteForce.decryptByBruteForce(workingText3, popularWords));
+
+                break;
+            case 4:
+                changeFiles();
+                break;
+            case 0:
+                System.exit(0);
+                break;
+            default:
+                break;
         }
     }
 

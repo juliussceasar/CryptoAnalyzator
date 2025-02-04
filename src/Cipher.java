@@ -1,21 +1,19 @@
 public class Cipher {
-    private char[] alphabet = ("abcdefghijklmnopqrstuvwxyz" +
+    private static char[] alphabet = ("abcdefghijklmnopqrstuvwxyz" +
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
             "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЧШЩЪЫЬЭЮЯ" +
             "абвгдеёжзийклмнопрстуфхчшщъыьэюя" +
             ".,-:;! ").toCharArray();
 
-    public Cipher(char[] alphabet) {
-        this.alphabet = alphabet;
-    }
-    public Cipher() {
+    public void changeCipher(char[] alphabet) {
+        Cipher.alphabet = alphabet;
     }
 
-    public char[] getAlphabet() {
+    public static char[] getAlphabet() {
         return alphabet;
     }
 
-    public String encrypt(String text, int shift) {
+    public static String encrypt(String text, int shift) {
         char[] textCh = text.toCharArray();
 
         for (int i = 0; i < text.length();i++) {
@@ -40,7 +38,7 @@ public class Cipher {
         }
         return String.valueOf(textCh);
     }
-    public String decrypt(String encryptedText, int shift) {
+    public static String decrypt(String encryptedText, int shift) {
         encryptedText = encrypt(encryptedText, -shift);
         return encryptedText;
     }
